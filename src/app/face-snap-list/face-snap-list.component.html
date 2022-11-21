@@ -1,4 +1,3 @@
-<app-face-snap 
-*ngFor="let faceSnap of faceSnaps" 
-[faceSnap]="faceSnap">
+<app-face-snap *ngFor="let faceSnap of faceSnaps"
+    [faceSnap]="faceSnap" (updateSnap)="updateSnap($event)">
 </app-face-snap>

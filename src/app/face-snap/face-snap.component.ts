@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { FaceSnap } from '../models/face-snap.model';
-import { FaceSnapsService } from '../services/face-snaps.service';
 
 @Component({
   selector: 'app-face-snap',
@@ -8,22 +7,27 @@ import { FaceSnapsService } from '../services/face-snaps.service';
   styleUrls: ['./face-snap.component.scss']
 })
 export class FaceSnapComponent implements OnInit {
-  @Input() faceSnap!: FaceSnap;
   buttonText!: string;
 
-  constructor(private faceSnapsService: FaceSnapsService){}
+  @Input() faceSnap!: FaceSnap;
+  @Output() updateSnap: EventEmitter<{id: any, type: any}> = new EventEmitter<{id: any, type: any}>();
+
+  constructor(){}
 
   ngOnInit(): void {
     this.buttonText = 'Oh snap!';
   }
 
-  onSnap(){
-    if(this.buttonText === 'Oh snap!'){
-      this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'snap');
-      this.buttonText = 'Oops, unSnap!';
-    } else {
-      this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'unSnap');
-      this.buttonText = 'Oh snap!';
-    }
+  onSnap(id: any, test: any) {
+      this.updateSnap.emit({
+          id: id,
+          type: 'Oh snap!' === test ? 'snap' : 'unSnap'
+      })
+
+      this.buttonText = 'Oh snap!' === this.buttonText ? 'Oops, unSnap!' : 'Oh snap!'
+  }
+
+  setColor(snap: any) {
+      return `rgb(0,${snap},0)`;
   }
 }
